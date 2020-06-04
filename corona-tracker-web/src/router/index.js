@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '@/store/index';
-import login from '../views/login.vue'
-import dashboard from '../views/dashboard.vue'
-
+const login = () => import(/* webpackChunkName: "home" */ '@/views/login.vue');
+const dashboard = () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard.vue');
 Vue.use(VueRouter)
+
 
 const routes = [
   {
@@ -24,7 +23,10 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: dashboard
+    component: dashboard,
+
+
+
   }
 ]
 
@@ -34,22 +36,6 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/'];
-  //const acceptedPages = ['/login', '/',"/menu",'/records','/records_printing','/salaries','/hr'];
-  const authRequired = !publicPages.includes(to.path);
-  const loggedIn = store.state.loggedIn;
-  console.log("user" ,loggedIn )
-  // trying to access a restricted page + not logged in
-  // redirect to login page
-  if ((authRequired && loggedIn == null)) {
-    console.log("not authed")
-    next({ name: 'home' });
-  } else {
-    console.log(" authed")
 
-    next();
-  }
-});
 
 export default router

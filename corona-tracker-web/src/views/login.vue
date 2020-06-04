@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import { auth } from "@/firestore";
 
 export default {
   name: "Login",
@@ -43,16 +43,23 @@ export default {
       }
     };
   },
+  mounted() {
+    this.$store.dispatch("fetchUser", null);
+  },
   methods: {
-    login() {firebase
-        .auth()
+    login() {
+      auth
         .signInWithEmailAndPassword(this.form.login, this.form.password)
         .then(() => {
-          this.$router.replace({ name: "dashboard" });
+          this.$router.replace({ name: "dashboard" }).catch(error => {
+            console.log(error);
+            this.$router.replace({ name: "dashboard" });
+          });
         })
         .catch(err => {
           this.error = err.message;
-        });}
+        });
+    }
   }
 };
 </script>
