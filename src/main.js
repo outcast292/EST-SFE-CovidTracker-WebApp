@@ -5,6 +5,8 @@ import store from './store'
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import Calendar from 'v-calendar/lib/components/calendar.umd'
+
 import { firebaseApp } from './firestore'
 //firestore
 
@@ -16,6 +18,8 @@ firebaseApp.auth().onAuthStateChanged(user => {
 
 //////
 Vue.use(BootstrapVue)
+Vue.component('calendar', Calendar)
+
 Vue.config.productionTip = false
 
 
