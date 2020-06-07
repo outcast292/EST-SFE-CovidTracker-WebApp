@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { auth } from '@/firestore'
 const login = () => import(/* webpackChunkName: "home" */ '@/views/login.vue');
 const dashboard = () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard.vue');
 Vue.use(VueRouter)
@@ -8,8 +9,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '*',
-    name: 'home',
-    component: login
+    redirect: "/dashboard"
   }
   ,
   {
@@ -20,13 +20,10 @@ const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: dashboard,
-
-
-
+    meta: {
+      requiresAuth: true
+    }
   }
 ]
 
@@ -37,5 +34,17 @@ const router = new VueRouter({
 })
 
 
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+  const currentUser = auth.currentUser
+
+  if (requiresAuth && !currentUser) {
+      next('/login')
+  } else if (requiresAuth && currentUser) {
+      next()
+  } else {
+      next()
+  }
+})
 
 export default router

@@ -7,12 +7,12 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import Calendar from 'v-calendar/lib/components/calendar.umd'
 
-import { firebaseApp } from './firestore'
+import { auth } from './firestore'
 //firestore
 
 
 
-firebaseApp.auth().onAuthStateChanged(user => {
+auth.onAuthStateChanged(user => {
   store.dispatch("fetchUser", user);
 });
 
@@ -22,9 +22,16 @@ Vue.component('calendar', Calendar)
 
 Vue.config.productionTip = false
 
+let app
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+auth.onAuthStateChanged(() => {
+  if (!app) {
+    new Vue({
+      el: '#app',
+      router,
+      store,
+      render: h => h(App)
+    }).$mount('#app')
+  }
+})
+
