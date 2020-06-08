@@ -21,6 +21,7 @@
         placeholder="Password"
         required
       />
+      <b-form-invalid-feedback :state="error">{{error_text}}</b-form-invalid-feedback>
       <button
         class="btn btn-lg btn-primary btn-block"
         type="submit"
@@ -35,11 +36,16 @@ import { auth } from "@/firestore";
 
 export default {
   name: "Login",
+  props: ["error"]
+    
+  ,
   data: function() {
     return {
       form: {
         login: "",
-        password: ""
+        password: "",
+        error:false,
+        error_text : ""
       }
     };
   },
@@ -57,7 +63,8 @@ export default {
           });
         })
         .catch(err => {
-          this.error = err.message;
+          this.error = false;
+          this.error_text = err.message
         });
     }
   }

@@ -13,9 +13,10 @@ const routes = [
   }
   ,
   {
-    path: '/login',
+    path: '/login/:error',
     name: 'login',
     component: login
+    , props: { default: true, sidebar: true }
   },
   {
     path: '/dashboard',
