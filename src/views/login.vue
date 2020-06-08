@@ -36,16 +36,14 @@ import { auth } from "@/firestore";
 
 export default {
   name: "Login",
-  props: ["error"]
-    
-  ,
+
   data: function() {
     return {
       form: {
         login: "",
         password: "",
-        error:false,
-        error_text : ""
+        error: false,
+        error_text: ""
       }
     };
   },
@@ -64,7 +62,7 @@ export default {
         })
         .catch(err => {
           this.error = false;
-          this.error_text = err.message
+          this.error_text = err.message;
         });
     }
   }
